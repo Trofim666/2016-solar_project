@@ -2,6 +2,7 @@
 # license: GPLv3
 
 gravitational_constant = 6.67408E-11
+G = gravitational_constant
 """Гравитационная постоянная Ньютона G"""
 
 
@@ -17,10 +18,15 @@ def calculate_force(body, space_objects):
     body.Fx = body.Fy = 0
     for obj in space_objects:
         if body == obj:
-            continue  # тело не действует гравитационной силой на само себя!
-        r = ((body.x - obj.x)**2 + (body.y - obj.y)**2)**0.5
-        body.Fx += 1  # FIXME: нужно вывести формулу...
-        body.Fy += 2  # FIXME: нужно вывести формулу...
+            pass
+        else: # тело не действует гравитационной силой на само себя!
+        
+            r = ((body.x - obj.x)**2 + (body.y - obj.y)**2)**0.5
+            F =  G*body.m*obj.m/r**2
+            cos_alfa = (obj.x - body.x)/r
+            sin_alfa = (obj.y - body.y)/r
+            body.Fx = F*cos_alfa   # FIXME: нужно вывести формулу...
+            body.Fy = F*sin_alfa  # FIXME: нужно вывести формулу...
 
 
 def move_space_object(body, dt):
@@ -32,8 +38,12 @@ def move_space_object(body, dt):
     """
 
     ax = body.Fx/body.m
-    body.x += 42  # FIXME: не понимаю как менять...
+    body.x += body.Vx*dt + (ax*dt**2)/2 # FIXME: не понимаю как менять...
     body.Vx += ax*dt
+    
+    ay = body.Fy/body.m
+    body.y += body.Vy*dt + (ay*dt**2)/2 # FIXME: не понимаю как менять...
+    body.Vy += ay*dt
     # FIXME: not done recalculation of y coordinate!
 
 
